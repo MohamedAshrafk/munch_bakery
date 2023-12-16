@@ -41,11 +41,13 @@ public class ProductWidget extends Table {
 
         Table rightTable = new Table();
 
+        TextButton addToCartButton = new TextButton("Add to Cart", skin);
+
         rightTable.add(new Label(name, labelStyle)).colspan(2).align(Align.right).row();
         rightTable.add().padTop(10).row();
         rightTable.add(new Label(cost, labelStyle)).colspan(2).align(Align.right).row();
         rightTable.add().padTop(10).row();
-        rightTable.add(new MySpinner(skin, 0, 0, 20, 1)).prefWidth(SPINNER_WIDTH).prefHeight(SPINNER_HEIGHT).padRight(HORIZONTAL_SPACING).align(Align.center);
+        rightTable.add(new MySpinner(skin, 1, 1, 20, 1)).prefWidth(SPINNER_WIDTH).prefHeight(SPINNER_HEIGHT).padRight(HORIZONTAL_SPACING).align(Align.center);
         rightTable.add(new TextButton("Add to Cart", skin)).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_LEFT - SPINNER_WIDTH - HORIZONTAL_SPACING * 2).prefHeight(SPINNER_HEIGHT - 100)
                 .align(Align.left);
 

@@ -41,8 +41,8 @@ public class MySpinner extends Table {
      *
      * @param skin         the skin to be used on making the spinner
      * @param startValue   the start value
-     * @param minVal the minimum value
-     * @param maxVal the maximum value
+     * @param minVal       the minimum value
+     * @param maxVal       the maximum value
      * @param stepSizePara the step size between values
      */
     public MySpinner(Skin skin, int startValue, int minVal, int maxVal, int stepSizePara) {
@@ -64,9 +64,8 @@ public class MySpinner extends Table {
                 if (validateValue(value - stepSize)) {
                     value -= stepSize;
                     spinnerTF.setText(String.valueOf(value));
-                } else {
-                    event.stop();
                 }
+                event.stop();
             }
         });
 
@@ -90,9 +89,8 @@ public class MySpinner extends Table {
                 if (validateValue(value + stepSize)) {
                     value += stepSize;
                     spinnerTF.setText(String.valueOf(value));
-                } else {
-                    event.stop();
                 }
+                event.stop();
             }
         });
 
