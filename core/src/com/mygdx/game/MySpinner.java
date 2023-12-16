@@ -64,8 +64,9 @@ public class MySpinner extends Table {
                 if (validateValue(value - stepSize)) {
                     value -= stepSize;
                     spinnerTF.setText(String.valueOf(value));
+                } else {
+                    event.stop();
                 }
-                event.stop();
             }
         });
 
@@ -89,8 +90,9 @@ public class MySpinner extends Table {
                 if (validateValue(value + stepSize)) {
                     value += stepSize;
                     spinnerTF.setText(String.valueOf(value));
+                } else {
+                    event.stop();
                 }
-                event.stop();
             }
         });
 

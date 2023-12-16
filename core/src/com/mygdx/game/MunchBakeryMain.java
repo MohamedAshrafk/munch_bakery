@@ -42,7 +42,7 @@ public class MunchBakeryMain extends Game {
         inCartList = new ArrayList<>();
 
         for (int i = 0; i < 15; i++) {
-            productsList.add(new Product("Product No: " + i, 32 + (i * 5) + ".00"));
+            productsList.add(new Product("Product No: " + i, (double) (32 + (i * 5))));
         }
 
 //        for (int i = 0; i < 4; i++) {

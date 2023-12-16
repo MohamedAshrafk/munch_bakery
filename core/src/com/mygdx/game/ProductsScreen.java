@@ -98,19 +98,20 @@ public class ProductsScreen implements Screen {
         VerticalGroup widgetGroup = new VerticalGroup();
 
         for (final Product product : ((MunchBakeryMain) game).getProductsList()) {
-            ProductWidget w = new ProductWidget(product.getName(), product.getCost(), skin);
-            w.addListener(new ChangeListener() {
+            final ProductWidget productWidget = new ProductWidget(product, skin);
+            productWidget.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     if (!((MunchBakeryMain) game).getInCartList().contains(product)) {
-                        ((MunchBakeryMain) game).getInCartList().add(product);
+                        Product newProduct = new Product(product.getName(), product.getCost(), productWidget.getQuantity());
+                        ((MunchBakeryMain) game).getInCartList().add(newProduct);
                         showDialogWithText("The Product was added successfully");
                     } else {
                         showDialogWithText("Already in the Cart");
                     }
                 }
             });
-            widgetGroup.addActor(w);
+            widgetGroup.addActor(productWidget);
             widgetGroup.space(SCROLL_VIEW_ITEMS_SPACING);
         }
 

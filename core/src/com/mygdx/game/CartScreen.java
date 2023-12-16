@@ -27,7 +27,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class CartScreen implements Screen {
 
-    private Game game;
+    private final Game game;
     private Stage stage;
     private Viewport viewport;
     private Skin skin;
@@ -88,9 +88,9 @@ public class CartScreen implements Screen {
         VerticalGroup widgetGroup = new VerticalGroup();
 
         for (Product product : ((MunchBakeryMain) game).getInCartList()) {
-            ProductWidget w = new ProductWidget(product.getName(), product.getCost(), skin);
+            CartItemWidget cartItemWidget = new CartItemWidget(product, skin);
 
-            widgetGroup.addActor(w);
+            widgetGroup.addActor(cartItemWidget);
             widgetGroup.space(SCROLL_VIEW_ITEMS_SPACING);
         }
 
