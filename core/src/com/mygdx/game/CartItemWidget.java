@@ -23,12 +23,11 @@ public class CartItemWidget extends Table {
     private static final float SPLITTING_SEGMENT_REMOVE = 0.15f;
     private static final float SPLITTING_SEGMENT_COST = 0.15f;
     private static final float SPLITTING_SEGMENT_PRODUCT = 0.3f;
-    private static final float SPLITTING_SEGMENT_IMAGE = 0.2f;
     private static final int HORIZONTAL_SPACING = 25;
 
     private final MySpinner spinner;
-    private final Label calculatedCostLabel;
 
+    private final Label calculatedCostLabel;
     private double calculatedCost;
 
     public double getCalculatedCost() {

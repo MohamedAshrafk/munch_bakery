@@ -6,6 +6,8 @@ import static com.mygdx.game.MunchBakeryMain.SCREEN_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCREEN_WIDTH;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_ITEMS_SPACING;
+import static com.mygdx.game.MySpinner.DECREMENT_BUTTON_NAME;
+import static com.mygdx.game.MySpinner.INCREMENT_BUTTON_NAME;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -25,7 +27,12 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.Objects;
+
 public class CartScreen implements Screen {
+
+    private static final int TOTAL_COST_TABLE_HEIGHT = 170;
+    private static final int TOTAL_COST_RIGHT_PADDING = 300;
 
     private final Game game;
     private Stage stage;
@@ -34,7 +41,10 @@ public class CartScreen implements Screen {
     private Table table;
     private Label.LabelStyle labelStyle;
 
-    public CartScreen(Game game){
+    private Label totalCostLabel;
+    private double totalCost;
+
+    public CartScreen(Game game) {
         this.game = game;
     }
 
@@ -85,17 +95,43 @@ public class CartScreen implements Screen {
     }
 
     private void configureBody() {
-        VerticalGroup widgetGroup = new VerticalGroup();
+        final VerticalGroup widgetGroup = new VerticalGroup();
+        totalCost = 0;
 
         for (Product product : ((MunchBakeryMain) game).getInCartList()) {
             CartItemWidget cartItemWidget = new CartItemWidget(product, skin);
+            totalCost += cartItemWidget.getCalculatedCost();
 
             widgetGroup.addActor(cartItemWidget);
             widgetGroup.space(SCROLL_VIEW_ITEMS_SPACING);
+
+            widgetGroup.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    totalCost = 0;
+                    if (Objects.equals(actor.getName(), INCREMENT_BUTTON_NAME) || Objects.equals(actor.getName(), DECREMENT_BUTTON_NAME)) {
+                        for (Actor loopActor : widgetGroup.getChildren()) {
+                            totalCost += ((CartItemWidget) loopActor).getCalculatedCost();
+                        }
+                        totalCostLabel.setText(String.valueOf(totalCost));
+                    }
+                }
+            });
         }
 
+        totalCostLabel = new Label(String.valueOf(totalCost), labelStyle);
+
+        Table totalCostTable = new Table();
+        totalCostTable.align(Align.center);
+        totalCostTable.background(skin.getDrawable("default-slider"));
+
+        totalCostTable.add(new Label("Total", labelStyle)).padRight(TOTAL_COST_RIGHT_PADDING).align(Align.left);
+        totalCostTable.add(totalCostLabel).align(Align.left);
+
         ScrollPane scrollPane = new ScrollPane(widgetGroup);
-        table.add(scrollPane).prefHeight(SCROLL_VIEW_HEIGHT).prefWidth(SCREEN_WIDTH).align(Align.left);
+        table.add(scrollPane).prefHeight(SCROLL_VIEW_HEIGHT - TOTAL_COST_TABLE_HEIGHT).prefWidth(SCREEN_WIDTH).align(Align.left).row();
+        table.add(totalCostTable).prefHeight(TOTAL_COST_TABLE_HEIGHT).prefWidth(SCREEN_WIDTH - 100);
+
     }
 
     @Override

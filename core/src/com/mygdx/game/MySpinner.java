@@ -15,6 +15,9 @@ public class MySpinner extends Table {
     private static final int SPINNER_DIMENSION = 55;
     private static final int SMALL_SPACING = 15;
 
+    public static final String DECREMENT_BUTTON_NAME = "spinner decrement button";
+    public static final String INCREMENT_BUTTON_NAME = "spinner increment button";
+
 
     public int getValue() {
         return value;
@@ -69,6 +72,7 @@ public class MySpinner extends Table {
                 }
             }
         });
+        decrementButton.setName(DECREMENT_BUTTON_NAME);
 
         // Create a skin (you can use the default skin or create your own)
         Skin localSkin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -95,6 +99,7 @@ public class MySpinner extends Table {
                 }
             }
         });
+        incrementButton.setName(INCREMENT_BUTTON_NAME);
 
         add(incrementButton).prefWidth(SPINNER_DIMENSION).prefHeight(SPINNER_DIMENSION).align(Align.center).row();
         add().padTop(2f).row();
