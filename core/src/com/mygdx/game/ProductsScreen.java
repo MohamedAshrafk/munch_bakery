@@ -195,6 +195,6 @@ public class ProductsScreen implements Screen {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 }

@@ -179,6 +179,6 @@ public class CartScreen implements Screen {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 }
