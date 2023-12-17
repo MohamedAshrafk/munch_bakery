@@ -1,9 +1,13 @@
 package com.mygdx.game;
 
+import static com.mygdx.game.Utilities.getDrawableFromPath;
+
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MunchBakeryMain extends Game {
     public static final int SCREEN_WIDTH = 1080 + 100;
@@ -34,6 +38,8 @@ public class MunchBakeryMain extends Game {
         return inCartList;
     }
 
+    Random random = new Random();
+
 
     @Override
     public void create() {
@@ -41,13 +47,20 @@ public class MunchBakeryMain extends Game {
         productsList = new ArrayList<>();
         inCartList = new ArrayList<>();
 
-        for (int i = 0; i < 15; i++) {
-            productsList.add(new Product("Product No: " + i, (double) (32 + (i * 5))));
+        List<Drawable> drawableList = new ArrayList<>();
+        for (int i = 1; i <= 5; i++) {
+            drawableList.add(getDrawableFromPath("sweet" + i + ".png"));
         }
 
-//        for (int i = 0; i < 4; i++) {
-//            inCartList.add(new Product("Product No: " + i, 32 + (i * 5) + ".00"));
-//        }
+        for (int i = 0; i < 15; i++) {
+
+            // Generate a random integer in the range [min, max)
+            int min = 0;
+            int max = 5;
+            int randomInRange = random.nextInt(max - min) + min;
+
+            productsList.add(new Product("Product No: " + i, (double) (32 + (i * 5)), drawableList.get(randomInRange)));
+        }
 
         productsScreen = new ProductsScreen(this);
         cartScreen = new CartScreen(this);

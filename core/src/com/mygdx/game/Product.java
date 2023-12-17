@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+
 import java.util.Objects;
 
 public class Product {
@@ -7,14 +9,21 @@ public class Product {
     private final Double cost;
     private int quantity;
 
-    public Product(String name, Double cost) {
-        this(name, cost, 1);
+    public Drawable getImage() {
+        return image;
     }
 
-    public Product(String name, Double cost, int quantity) {
+    private final Drawable image;
+
+    public Product(String name, Double cost, Drawable image) {
+        this(name, cost, 1, image);
+    }
+
+    public Product(String name, Double cost, int quantity, Drawable image) {
         this.name = name;
         this.cost = cost;
         this.quantity = quantity;
+        this.image = image;
     }
 
     public String getName() {

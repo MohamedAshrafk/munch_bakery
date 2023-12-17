@@ -108,7 +108,7 @@ public class ProductsScreen implements Screen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     if (!((MunchBakeryMain) game).getInCartList().contains(product)) {
-                        Product newProduct = new Product(product.getName(), product.getCost(), productWidget.getQuantity());
+                        Product newProduct = new Product(product.getName(), product.getCost(), productWidget.getQuantity(), product.getImage());
                         ((MunchBakeryMain) game).getInCartList().add(newProduct);
                         showDialogWithText("The Product was added successfully");
                     } else {

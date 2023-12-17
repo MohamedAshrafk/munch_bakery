@@ -7,13 +7,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 
 public class ProductWidget extends Table {
 
@@ -46,6 +48,7 @@ public class ProductWidget extends Table {
         align(Align.left);
         padTop(HORIZONTAL_SPACING / 2f);
         padRight(HORIZONTAL_SPACING);
+        padLeft(HORIZONTAL_SPACING);
         padBottom(HORIZONTAL_SPACING / 2f);
 
         // Labels styles and settings
@@ -69,7 +72,14 @@ public class ProductWidget extends Table {
 //        rightTable.debug();
 //        debug();
 
-        add().prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_RIGHT).prefHeight(PRODUCT_WIDGET_HEIGHT);
+        Image productImage = new Image(product.getImage());
+        productImage.setAlign(Align.center);
+        productImage.setScaling(Scaling.fit);
+
+        Container<Image> imageContainer = new Container<>(productImage);
+        imageContainer.fill();
+
+        add(imageContainer).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_RIGHT - HORIZONTAL_SPACING * 2).prefHeight(PRODUCT_WIDGET_HEIGHT).padRight(HORIZONTAL_SPACING);
         add(rightTable).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_LEFT).align(Align.left);
     }
 }
