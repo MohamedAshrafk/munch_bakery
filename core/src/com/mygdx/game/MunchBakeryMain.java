@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MunchBakeryMain extends Game {
-    public static final int SCREEN_WIDTH = 1080;
-    public static final int SCREEN_HEIGHT = 2340;
+    public static final int SCREEN_WIDTH = 1080 + 100;
+    public static final int SCREEN_HEIGHT = 2340 + 125;
     public static final int BOTTOM_PADDING = 150;
     public static final int HEADER_HEIGHT = 200;
     public static final int SCROLL_VIEW_HEIGHT = SCREEN_HEIGHT - HEADER_HEIGHT - BOTTOM_PADDING;

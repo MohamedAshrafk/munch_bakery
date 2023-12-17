@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import static com.mygdx.game.Utilities.getDrawableFromPath;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -56,8 +58,8 @@ public class MySpinner extends Table {
         this.stepSize = stepSizePara;
 
         // making the spinner using two TextButtons and a TextField
-        Drawable minusIconDrawable = skin.getDrawable("tree-minus");
-        Drawable plusIconDrawable = skin.getDrawable("tree-plus");
+        Drawable minusIconDrawable = getDrawableFromPath("arrow_down_icon.png");
+        Drawable plusIconDrawable = getDrawableFromPath("arrow_up_icon.png");
         Drawable selectedIconDrawable = skin.getDrawable("default-round-down");
 
         Button decrementButton = new Button(new Button.ButtonStyle(minusIconDrawable, selectedIconDrawable, null));

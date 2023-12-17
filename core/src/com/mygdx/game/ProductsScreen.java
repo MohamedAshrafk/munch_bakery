@@ -2,6 +2,8 @@ package com.mygdx.game;
 
 import static com.mygdx.game.MunchBakeryMain.BOTTOM_PADDING;
 import static com.mygdx.game.MunchBakeryMain.HEADER_HEIGHT;
+import static com.mygdx.game.MunchBakeryMain.SCREEN_HEIGHT;
+import static com.mygdx.game.MunchBakeryMain.SCREEN_WIDTH;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_ITEMS_SPACING;
 import static com.mygdx.game.Utilities.createRoundedDrawable;
@@ -31,8 +33,6 @@ public class ProductsScreen implements Screen {
 
     public static final int GENERAL_HEIGHT_SPACING = 50;
     public static final int TABLE_HORIZONTAL_PADDING = 30;
-    public static final int SCREEN_WIDTH = 1080;
-    public static final int SCREEN_HEIGHT = 2340;
     public static final int DIALOG_WIDTH = 900;
 
     public static final int BUTTON_HEIGHT = 70;

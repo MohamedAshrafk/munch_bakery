@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.Align;
 
 public class ProductWidget extends Table {
 
-    private static final int PRODUCT_WIDGET_WIDTH = SCREEN_WIDTH - 70;
+    private static final int PRODUCT_WIDGET_WIDTH = SCREEN_WIDTH - 100;
     private static final int PRODUCT_WIDGET_HEIGHT = 300;
     private static final int WINDOW_ROUNDING_RADIUS = 50;
     private static final int SPINNER_WIDTH = 50;
@@ -54,6 +54,7 @@ public class ProductWidget extends Table {
         labelStyle.font.getData().setScale(2.5f);
 
         background(createRoundedDrawable(Color.DARK_GRAY, PRODUCT_WIDGET_WIDTH, PRODUCT_WIDGET_HEIGHT, WINDOW_ROUNDING_RADIUS));
+//        background(createRoundedDrawable(Color.WHITE, PRODUCT_WIDGET_WIDTH, PRODUCT_WIDGET_HEIGHT, WINDOW_ROUNDING_RADIUS));
 
         Table rightTable = new Table();
 

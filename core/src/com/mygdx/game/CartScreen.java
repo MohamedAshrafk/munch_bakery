@@ -9,6 +9,8 @@ import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_ITEMS_SPACING;
 import static com.mygdx.game.MySpinner.DECREMENT_BUTTON_NAME;
 import static com.mygdx.game.MySpinner.INCREMENT_BUTTON_NAME;
+import static com.mygdx.game.Utilities.getColorFromRGB;
+import static com.mygdx.game.Utilities.getTexturedColor;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -80,6 +82,7 @@ public class CartScreen implements Screen {
     private void configureHeader() {
         Table headerTable = new Table();
         headerTable.background(skin.getDrawable("default-slider"));
+//        headerTable.background(getTexturedColor(getColorFromRGB(255,181,170,255)));
 
         TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ChangeListener() {
@@ -116,7 +119,7 @@ public class CartScreen implements Screen {
                         }
                         totalCostLabel.setText(String.valueOf(totalCost));
                     }
-                    if (Objects.equals(actor.getName(), REMOVE_ITEM_BUTTON_NAME)){
+                    if (Objects.equals(actor.getName(), REMOVE_ITEM_BUTTON_NAME)) {
                         ((MunchBakeryMain) game).getInCartList().remove(product);
                         widgetGroup.removeActor(cartItemWidget);
                     }
@@ -129,6 +132,7 @@ public class CartScreen implements Screen {
         Table totalCostTable = new Table();
         totalCostTable.align(Align.center);
         totalCostTable.background(skin.getDrawable("default-slider"));
+//        totalCostTable.background(getTexturedColor(getColorFromRGB(255, 181, 170, 255)));
 
         totalCostTable.add(new Label("Total", labelStyle)).padRight(TOTAL_COST_RIGHT_PADDING).align(Align.left);
         totalCostTable.add(totalCostLabel).align(Align.left);
@@ -147,6 +151,7 @@ public class CartScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
+//        Gdx.gl.glClearColor(255 / 255f, 247 / 255f, 248 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Update and draw the stage
