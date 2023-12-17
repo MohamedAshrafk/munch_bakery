@@ -2,16 +2,18 @@ package com.mygdx.game;
 
 import static com.mygdx.game.MunchBakeryMain.SCREEN_WIDTH;
 import static com.mygdx.game.Utilities.createRoundedDrawable;
+import static com.mygdx.game.Utilities.getDrawableFromPath;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 
 public class CartItemWidget extends Table {
@@ -25,7 +27,7 @@ public class CartItemWidget extends Table {
     private static final float SPLITTING_SEGMENT_REMOVE = 0.15f;
     private static final float SPLITTING_SEGMENT_COST = 0.15f;
     private static final float SPLITTING_SEGMENT_PRODUCT = 0.3f;
-    private static final int HORIZONTAL_SPACING = 25;
+    private static final int HORIZONTAL_SPACING = 40;
 
     private final MySpinner spinner;
 
@@ -85,10 +87,12 @@ public class CartItemWidget extends Table {
 //        productTable.debug();
 //        debug();
 
-        TextButton removeButton = new TextButton("Remove", skin);
+        Drawable removeIconDrawable = getDrawableFromPath("remove_icon_130px.png");
+
+        Button removeButton = new Button(new Button.ButtonStyle(removeIconDrawable, removeIconDrawable, null));
         removeButton.setName(REMOVE_ITEM_BUTTON_NAME);
 
-        add(removeButton).prefWidth(CART_ITEM_WIDGET_WIDTH * SPLITTING_SEGMENT_REMOVE).align(Align.left);
+        add(removeButton).align(Align.left);
 
         calculatedCostLabel = new Label(String.valueOf(calculatedCost), labelStyle);
         calculatedCostLabel.setAlignment(Align.right);

@@ -9,8 +9,7 @@ import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_ITEMS_SPACING;
 import static com.mygdx.game.MySpinner.DECREMENT_BUTTON_NAME;
 import static com.mygdx.game.MySpinner.INCREMENT_BUTTON_NAME;
-import static com.mygdx.game.Utilities.getColorFromRGB;
-import static com.mygdx.game.Utilities.getTexturedColor;
+import static com.mygdx.game.Utilities.getDrawableFromPath;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -19,13 +18,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -84,7 +84,10 @@ public class CartScreen implements Screen {
         headerTable.background(skin.getDrawable("default-slider"));
 //        headerTable.background(getTexturedColor(getColorFromRGB(255,181,170,255)));
 
-        TextButton backButton = new TextButton("Back", skin);
+        Drawable arrowIcon = getDrawableFromPath("arrow_left_icon_170px.png");
+
+        Button backButton = new Button(new Button.ButtonStyle(arrowIcon, arrowIcon, null));
+
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
