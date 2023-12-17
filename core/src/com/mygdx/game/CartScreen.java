@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import static com.mygdx.game.CartItemWidget.REMOVE_ITEM_BUTTON_NAME;
 import static com.mygdx.game.MunchBakeryMain.BOTTOM_PADDING;
 import static com.mygdx.game.MunchBakeryMain.HEADER_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCREEN_HEIGHT;
@@ -98,14 +99,14 @@ public class CartScreen implements Screen {
         final VerticalGroup widgetGroup = new VerticalGroup();
         totalCost = 0;
 
-        for (Product product : ((MunchBakeryMain) game).getInCartList()) {
-            CartItemWidget cartItemWidget = new CartItemWidget(product, skin);
+        for (final Product product : ((MunchBakeryMain) game).getInCartList()) {
+            final CartItemWidget cartItemWidget = new CartItemWidget(product, skin);
             totalCost += cartItemWidget.getCalculatedCost();
 
             widgetGroup.addActor(cartItemWidget);
             widgetGroup.space(SCROLL_VIEW_ITEMS_SPACING);
 
-            widgetGroup.addListener(new ChangeListener() {
+            cartItemWidget.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     totalCost = 0;
@@ -114,6 +115,10 @@ public class CartScreen implements Screen {
                             totalCost += ((CartItemWidget) loopActor).getCalculatedCost();
                         }
                         totalCostLabel.setText(String.valueOf(totalCost));
+                    }
+                    if (Objects.equals(actor.getName(), REMOVE_ITEM_BUTTON_NAME)){
+                        ((MunchBakeryMain) game).getInCartList().remove(product);
+                        widgetGroup.removeActor(cartItemWidget);
                     }
                 }
             });

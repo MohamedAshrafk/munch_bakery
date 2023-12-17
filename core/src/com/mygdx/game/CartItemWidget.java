@@ -15,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 public class CartItemWidget extends Table {
+    public static final String REMOVE_ITEM_BUTTON_NAME = "cart remove item button";
+
     private static final int CART_ITEM_WIDGET_WIDTH = SCREEN_WIDTH - 70;
     private static final int PRODUCT_WIDGET_HEIGHT = 300;
     private static final int WINDOW_ROUNDING_RADIUS = 50;
@@ -83,7 +85,10 @@ public class CartItemWidget extends Table {
 //        productTable.debug();
 //        debug();
 
-        add(new TextButton("Remove", skin)).prefWidth(CART_ITEM_WIDGET_WIDTH * SPLITTING_SEGMENT_REMOVE).align(Align.left);
+        TextButton removeButton = new TextButton("Remove", skin);
+        removeButton.setName(REMOVE_ITEM_BUTTON_NAME);
+
+        add(removeButton).prefWidth(CART_ITEM_WIDGET_WIDTH * SPLITTING_SEGMENT_REMOVE).align(Align.left);
 
         calculatedCostLabel = new Label(String.valueOf(calculatedCost), labelStyle);
         calculatedCostLabel.setAlignment(Align.right);
