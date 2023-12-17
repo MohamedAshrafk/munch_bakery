@@ -116,15 +116,22 @@ public class CartScreen implements Screen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     totalCost = 0;
+                    boolean recalculateCost = false;
                     if (Objects.equals(actor.getName(), INCREMENT_BUTTON_NAME) || Objects.equals(actor.getName(), DECREMENT_BUTTON_NAME)) {
-                        for (Actor loopActor : widgetGroup.getChildren()) {
-                            totalCost += ((CartItemWidget) loopActor).getCalculatedCost();
-                        }
-                        totalCostLabel.setText(String.valueOf(totalCost));
+                        recalculateCost = true;
                     }
                     if (Objects.equals(actor.getName(), REMOVE_ITEM_BUTTON_NAME)) {
                         ((MunchBakeryMain) game).getInCartList().remove(product);
                         widgetGroup.removeActor(cartItemWidget);
+
+                        recalculateCost = true;
+                    }
+
+                    if (recalculateCost) {
+                        for (Actor loopActor : widgetGroup.getChildren()) {
+                            totalCost += ((CartItemWidget) loopActor).getCalculatedCost();
+                        }
+                        totalCostLabel.setText(String.valueOf(totalCost));
                     }
                 }
             });
