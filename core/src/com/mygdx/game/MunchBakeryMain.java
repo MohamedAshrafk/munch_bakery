@@ -60,7 +60,7 @@ public class MunchBakeryMain extends Game {
             int max = drawableList.size();
             int randomInRange = random.nextInt(max - min) + min;
 
-            productsList.add(new Product("Product No: " + i, (double) (32 + (i * 5)), drawableList.get(randomInRange)));
+            productsList.add(new Product("Product No: " + i, (double) (32 + (i * 5)), drawableList.get(randomInRange), i));
         }
 
         productsScreen = new ProductsScreen(this);

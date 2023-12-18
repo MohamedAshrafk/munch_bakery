@@ -104,11 +104,17 @@ public class ProductsScreen implements Screen {
 
         for (final Product product : ((MunchBakeryMain) game).getProductsList()) {
             final ProductWidget productWidget = new ProductWidget(product, skin);
+
+            widgetGroup.addActor(productWidget);
+            widgetGroup.space(SCROLL_VIEW_ITEMS_SPACING);
+
             productWidget.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     if (!((MunchBakeryMain) game).getInCartList().contains(product)) {
-                        Product newProduct = new Product(product.getName(), product.getCost(), productWidget.getQuantity(), product.getImage());
+                        Product newProduct = new Product(product);
+                        newProduct.setQuantity(productWidget.getQuantity());
+
                         ((MunchBakeryMain) game).getInCartList().add(newProduct);
                         showDialogWithText("The Product was added successfully");
                     } else {
@@ -116,8 +122,6 @@ public class ProductsScreen implements Screen {
                     }
                 }
             });
-            widgetGroup.addActor(productWidget);
-            widgetGroup.space(SCROLL_VIEW_ITEMS_SPACING);
         }
 
         ScrollPane scrollPane = new ScrollPane(widgetGroup);

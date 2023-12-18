@@ -39,13 +39,11 @@ public class CartScreen implements Screen {
 
     private final Game game;
     private Stage stage;
-    private Viewport viewport;
     private Skin skin;
     private Table table;
     private Label.LabelStyle labelStyle;
 
     private Label totalCostLabel;
-    private double totalCost;
 
     public CartScreen(Game game) {
         this.game = game;
@@ -53,7 +51,7 @@ public class CartScreen implements Screen {
 
     @Override
     public void show() {
-        viewport = new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
+        Viewport viewport = new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
         stage = new Stage(viewport);
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -103,11 +101,11 @@ public class CartScreen implements Screen {
 
     private void configureBody() {
         final VerticalGroup widgetGroup = new VerticalGroup();
-        totalCost = 0;
+        double totalCost = 0;
 
         for (final Product product : ((MunchBakeryMain) game).getInCartList()) {
             final CartItemWidget cartItemWidget = new CartItemWidget(product, skin);
-            totalCost += cartItemWidget.getCalculatedCost();
+            totalCost += product.getCost() * product.getQuantity();
 
             widgetGroup.addActor(cartItemWidget);
             widgetGroup.space(SCROLL_VIEW_ITEMS_SPACING);
@@ -115,23 +113,23 @@ public class CartScreen implements Screen {
             cartItemWidget.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    totalCost = 0;
-                    boolean recalculateCost = false;
+                    double localTotalCost = 0;
+                    boolean reCalculateCost = false;
                     if (Objects.equals(actor.getName(), INCREMENT_BUTTON_NAME) || Objects.equals(actor.getName(), DECREMENT_BUTTON_NAME)) {
-                        recalculateCost = true;
+                        reCalculateCost = true;
                     }
                     if (Objects.equals(actor.getName(), REMOVE_ITEM_BUTTON_NAME)) {
                         ((MunchBakeryMain) game).getInCartList().remove(product);
                         widgetGroup.removeActor(cartItemWidget);
 
-                        recalculateCost = true;
+                        reCalculateCost = true;
                     }
 
-                    if (recalculateCost) {
-                        for (Actor loopActor : widgetGroup.getChildren()) {
-                            totalCost += ((CartItemWidget) loopActor).getCalculatedCost();
+                    if (reCalculateCost) {
+                        for (final Product product : ((MunchBakeryMain) game).getInCartList()) {
+                            localTotalCost += product.getCost() * product.getQuantity();
                         }
-                        totalCostLabel.setText(String.valueOf(totalCost));
+                        totalCostLabel.setText(String.valueOf(localTotalCost));
                     }
                 }
             });

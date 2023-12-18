@@ -36,27 +36,17 @@ public class CartItemWidget extends Table {
     private final MySpinner spinner;
 
     private final Label calculatedCostLabel;
-    private double calculatedCost;
-
-    public double getCalculatedCost() {
-        return calculatedCost;
-    }
-
-    public int getQuantity() {
-        return spinner.getValue();
-    }
 
     public CartItemWidget(final Product product, Skin skin) {
         setSkin(skin);
 
         spinner = new MySpinner(skin, product.getQuantity(), 1, 20, 1);
-        calculatedCost = product.getCost() * product.getQuantity();
 
         spinner.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                calculatedCost = product.getCost() * spinner.getValue();
-                calculatedCostLabel.setText(String.valueOf(calculatedCost));
+                product.setQuantity(spinner.getValue());
+                calculatedCostLabel.setText(String.valueOf(product.getCost() * product.getQuantity()));
             }
         });
 
@@ -98,6 +88,7 @@ public class CartItemWidget extends Table {
 
         add(removeButton).align(Align.left);
 
+        double calculatedCost = product.getCost() * product.getQuantity();
         calculatedCostLabel = new Label(String.valueOf(calculatedCost), labelStyle);
         calculatedCostLabel.setAlignment(Align.right);
         add(calculatedCostLabel).prefWidth(CART_ITEM_WIDGET_WIDTH * SPLITTING_SEGMENT_COST).padRight(HORIZONTAL_SPACING / 2f).align(Align.left);
