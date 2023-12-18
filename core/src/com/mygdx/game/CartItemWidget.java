@@ -8,9 +8,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -36,11 +36,13 @@ public class CartItemWidget extends Table {
     private final MySpinner spinner;
     private final Label calculatedCostLabel;
 
-    /** The appropriate widget to hold the product in the cart.
+    /**
+     * The appropriate widget to hold the product in the cart.
      * Extension of {@link Table}
+     *
      * @param product The product to be presented in this widget
-     * @param skin The skin used
-     * */
+     * @param skin    The skin used
+     */
     public CartItemWidget(final Product product, Skin skin) {
         setSkin(skin);
 
@@ -88,7 +90,7 @@ public class CartItemWidget extends Table {
 
         Drawable removeIconDrawable = getDrawableFromPath("remove_icon_130px.png");
 
-        Button removeButton = new Button(new Button.ButtonStyle(removeIconDrawable, removeIconDrawable, null));
+        ImageButton removeButton = new ImageButton(removeIconDrawable);
         removeButton.setName(REMOVE_ITEM_BUTTON_NAME);
 
         add(removeButton).align(Align.left);

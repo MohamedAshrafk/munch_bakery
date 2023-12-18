@@ -16,8 +16,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -87,7 +87,7 @@ public class ProductsScreen implements Screen {
 
         Drawable cartIconDrawable = getDrawableFromPath("cart_essential_shopping_170px.png");
 
-        Button cartButton = new Button(new Button.ButtonStyle(cartIconDrawable, cartIconDrawable, null));
+        ImageButton cartButton = new ImageButton(cartIconDrawable);
         cartButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -113,7 +113,7 @@ public class ProductsScreen implements Screen {
             productWidget.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    if (Objects.equals(actor.getName(), ProductWidget.ADD_TO_CART_BUTTON_NAME)){
+                    if (Objects.equals(actor.getName(), ProductWidget.ADD_TO_CART_BUTTON_NAME)) {
                         if (!munchBakeryMain.getInCartList().contains(product)) {
                             Product newProduct = new Product(product);
                             newProduct.setQuantity(productWidget.getQuantity());

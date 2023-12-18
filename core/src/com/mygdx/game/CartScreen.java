@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -81,7 +81,7 @@ public class CartScreen implements Screen {
 
         Drawable arrowIcon = getDrawableFromPath("arrow_left_icon_170px.png");
 
-        Button backButton = new Button(new Button.ButtonStyle(arrowIcon, arrowIcon, null));
+        ImageButton backButton = new ImageButton(arrowIcon);
 
         backButton.addListener(new ChangeListener() {
             @Override
