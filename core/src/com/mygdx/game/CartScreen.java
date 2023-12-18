@@ -1,17 +1,13 @@
 package com.mygdx.game;
 
-import static com.mygdx.game.CartItemWidget.REMOVE_ITEM_BUTTON_NAME;
 import static com.mygdx.game.MunchBakeryMain.BOTTOM_PADDING;
 import static com.mygdx.game.MunchBakeryMain.HEADER_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCREEN_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCREEN_WIDTH;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_ITEMS_SPACING;
-import static com.mygdx.game.MySpinner.DECREMENT_BUTTON_NAME;
-import static com.mygdx.game.MySpinner.INCREMENT_BUTTON_NAME;
 import static com.mygdx.game.Utilities.getDrawableFromPath;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -37,7 +33,8 @@ public class CartScreen implements Screen {
     private static final int TOTAL_COST_TABLE_HEIGHT = 170;
     private static final int TOTAL_COST_RIGHT_PADDING = 300;
 
-    private final Game game;
+    // considering the main class as the data source (should be replaced by appropriate data source like internet or local database)
+    private final MunchBakeryMain munchBakeryMain;
     private Stage stage;
     private Skin skin;
     private Table table;
@@ -45,8 +42,8 @@ public class CartScreen implements Screen {
 
     private Label totalCostLabel;
 
-    public CartScreen(Game game) {
-        this.game = game;
+    public CartScreen(MunchBakeryMain munchBakeryMain) {
+        this.munchBakeryMain = munchBakeryMain;
     }
 
     @Override
@@ -89,11 +86,11 @@ public class CartScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(((MunchBakeryMain) game).getProductsScreen());
+                munchBakeryMain.setScreen(munchBakeryMain.getProductsScreen());
             }
         });
-        headerTable.add(backButton).prefWidth(150).prefHeight(70).padRight(250).align(Align.left);
-        headerTable.add(new Label("Your Cart", labelStyle)).padRight(350).align(Align.center);
+        headerTable.add(backButton).padRight(220).align(Align.left);
+        headerTable.add(new Label("Your Cart", labelStyle)).padRight(380).align(Align.center);
 
         table.add(headerTable).prefWidth(SCREEN_WIDTH).prefHeight(HEADER_HEIGHT).align(Align.center).row();
         table.add().padTop(50).row();
@@ -103,7 +100,7 @@ public class CartScreen implements Screen {
         final VerticalGroup widgetGroup = new VerticalGroup();
         double totalCost = 0;
 
-        for (final Product product : ((MunchBakeryMain) game).getInCartList()) {
+        for (final Product product : munchBakeryMain.getInCartList()) {
             final CartItemWidget cartItemWidget = new CartItemWidget(product, skin);
             totalCost += product.getCost() * product.getQuantity();
 
@@ -115,18 +112,20 @@ public class CartScreen implements Screen {
                 public void changed(ChangeEvent event, Actor actor) {
                     double localTotalCost = 0;
                     boolean reCalculateCost = false;
-                    if (Objects.equals(actor.getName(), INCREMENT_BUTTON_NAME) || Objects.equals(actor.getName(), DECREMENT_BUTTON_NAME)) {
+                    // If the spinner value of any cartItemWidget is changed or we removed any item, the total cost should be updated
+                    if (Objects.equals(actor.getName(), MySpinner.INCREMENT_BUTTON_NAME) || Objects.equals(actor.getName(), MySpinner.DECREMENT_BUTTON_NAME)) {
                         reCalculateCost = true;
                     }
-                    if (Objects.equals(actor.getName(), REMOVE_ITEM_BUTTON_NAME)) {
-                        ((MunchBakeryMain) game).getInCartList().remove(product);
+                    if (Objects.equals(actor.getName(), CartItemWidget.REMOVE_ITEM_BUTTON_NAME)) {
+                        munchBakeryMain.getInCartList().remove(product);
                         widgetGroup.removeActor(cartItemWidget);
 
                         reCalculateCost = true;
                     }
 
+                    // looping on the (in cart) products list to calculate the new total cost
                     if (reCalculateCost) {
-                        for (final Product product : ((MunchBakeryMain) game).getInCartList()) {
+                        for (final Product product : munchBakeryMain.getInCartList()) {
                             localTotalCost += product.getCost() * product.getQuantity();
                         }
                         totalCostLabel.setText(String.valueOf(localTotalCost));

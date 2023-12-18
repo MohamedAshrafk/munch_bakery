@@ -9,7 +9,6 @@ import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_ITEMS_SPACING;
 import static com.mygdx.game.Utilities.createRoundedDrawable;
 import static com.mygdx.game.Utilities.getDrawableFromPath;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -32,6 +31,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.Objects;
+
 public class ProductsScreen implements Screen {
 
     public static final int GENERAL_HEIGHT_SPACING = 50;
@@ -41,14 +42,15 @@ public class ProductsScreen implements Screen {
     public static final int BUTTON_HEIGHT = 70;
     public static final int BUTTON_WIDTH = 140;
 
-    private final Game game;
+    // considering the main class as the data source (should be replaced by appropriate data source like internet or local database)
+    private final MunchBakeryMain munchBakeryMain;
     private Stage stage;
     private Skin skin;
     private Table table;
     private Label.LabelStyle labelStyle;
 
-    public ProductsScreen(Game game) {
-        this.game = game;
+    public ProductsScreen(MunchBakeryMain munchBakeryMain) {
+        this.munchBakeryMain = munchBakeryMain;
     }
 
     @Override
@@ -89,11 +91,11 @@ public class ProductsScreen implements Screen {
         cartButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(((MunchBakeryMain) game).getCartScreen());
+                munchBakeryMain.setScreen(munchBakeryMain.getCartScreen());
             }
         });
-        headerTable.add(cartButton).prefWidth(150).prefHeight(70).padRight(250).align(Align.left);
-        headerTable.add(new Label("Products", labelStyle)).padRight(350).align(Align.center);
+        headerTable.add(cartButton).padRight(220).align(Align.left);
+        headerTable.add(new Label("Products", labelStyle)).padRight(380).align(Align.center);
 
         table.add(headerTable).prefWidth(SCREEN_WIDTH).prefHeight(HEADER_HEIGHT).align(Align.center).row();
         table.add().padTop(50).row();
@@ -102,7 +104,7 @@ public class ProductsScreen implements Screen {
     private void configureBody() {
         VerticalGroup widgetGroup = new VerticalGroup();
 
-        for (final Product product : ((MunchBakeryMain) game).getProductsList()) {
+        for (final Product product : munchBakeryMain.getProductsList()) {
             final ProductWidget productWidget = new ProductWidget(product, skin);
 
             widgetGroup.addActor(productWidget);
@@ -111,14 +113,16 @@ public class ProductsScreen implements Screen {
             productWidget.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    if (!((MunchBakeryMain) game).getInCartList().contains(product)) {
-                        Product newProduct = new Product(product);
-                        newProduct.setQuantity(productWidget.getQuantity());
+                    if (Objects.equals(actor.getName(), ProductWidget.ADD_TO_CART_BUTTON_NAME)){
+                        if (!munchBakeryMain.getInCartList().contains(product)) {
+                            Product newProduct = new Product(product);
+                            newProduct.setQuantity(productWidget.getQuantity());
 
-                        ((MunchBakeryMain) game).getInCartList().add(newProduct);
-                        showDialogWithText("The Product was added successfully");
-                    } else {
-                        showDialogWithText("Already in the Cart");
+                            munchBakeryMain.getInCartList().add(newProduct);
+                            showDialogWithText("The Product was added successfully");
+                        } else {
+                            showDialogWithText("Already in the Cart");
+                        }
                     }
                 }
             });

@@ -6,19 +6,18 @@ import static com.mygdx.game.Utilities.createRoundedDrawable;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 
 public class ProductWidget extends Table {
 
+    public static final String ADD_TO_CART_BUTTON_NAME = "add to cart button";
     private static final int PRODUCT_WIDGET_WIDTH = SCREEN_WIDTH - 100;
     private static final int PRODUCT_WIDGET_HEIGHT = 300;
     private static final int WINDOW_ROUNDING_RADIUS = 50;
@@ -34,16 +33,15 @@ public class ProductWidget extends Table {
         return spinner.getValue();
     }
 
+    /** The appropriate widget to hold the product in products screen.
+     * Extension of {@link Table}
+     * @param product The product to be presented in this widget
+     * @param skin The skin used
+     * */
     public ProductWidget(Product product, Skin skin) {
         setSkin(skin);
 
         spinner = new MySpinner(skin, product.getQuantity(), 1, 20, 1);
-        spinner.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                event.stop();
-            }
-        });
 
         align(Align.left);
         padTop(HORIZONTAL_SPACING / 2f);
@@ -66,7 +64,10 @@ public class ProductWidget extends Table {
         rightTable.add(new Label(String.valueOf(product.getCost()), labelStyle)).colspan(2).align(Align.right).row();
         rightTable.add().padTop(10).row();
         rightTable.add(spinner).prefWidth(SPINNER_WIDTH).prefHeight(SPINNER_HEIGHT).padRight(HORIZONTAL_SPACING).align(Align.center);
-        rightTable.add(new TextButton("Add to Cart", skin)).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_LEFT - SPINNER_WIDTH - HORIZONTAL_SPACING * 2).prefHeight(SPINNER_HEIGHT - 100)
+
+        TextButton addToCartButton = new TextButton("Add to Cart", skin);
+        addToCartButton.setName(ADD_TO_CART_BUTTON_NAME);
+        rightTable.add(addToCartButton).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_LEFT - SPINNER_WIDTH - HORIZONTAL_SPACING * 2).prefHeight(SPINNER_HEIGHT - 100)
                 .align(Align.left);
 
 //        rightTable.debug();

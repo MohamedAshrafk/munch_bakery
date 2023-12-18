@@ -52,15 +52,16 @@ public class MunchBakeryMain extends Game {
             drawableList.add(getDrawableFromPath("sweet" + i + ".png"));
         }
 
-        for (int i = 0; i < 25; i++) {
+        // Generate a random integer in the range [min, max)
+        // notice max) is not included
+        int min = 0;
+        int max = drawableList.size();
 
-            // Generate a random integer in the range [min, max)
-            // notice max) is not included
-            int min = 0;
-            int max = drawableList.size();
+        for (int id = 0; id < 25; id++) {
+
             int randomInRange = random.nextInt(max - min) + min;
 
-            productsList.add(new Product("Product No: " + i, (double) (32 + (i * 5)), drawableList.get(randomInRange), i));
+            productsList.add(new Product("Product No: " + id, (double) (32 + (id * 5)), drawableList.get(randomInRange), id));
         }
 
         productsScreen = new ProductsScreen(this);

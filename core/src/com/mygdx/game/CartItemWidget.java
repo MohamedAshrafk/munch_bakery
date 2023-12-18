@@ -34,14 +34,19 @@ public class CartItemWidget extends Table {
     private static final int HORIZONTAL_SPACING = 40;
 
     private final MySpinner spinner;
-
     private final Label calculatedCostLabel;
 
+    /** The appropriate widget to hold the product in the cart.
+     * Extension of {@link Table}
+     * @param product The product to be presented in this widget
+     * @param skin The skin used
+     * */
     public CartItemWidget(final Product product, Skin skin) {
         setSkin(skin);
 
         spinner = new MySpinner(skin, product.getQuantity(), 1, 20, 1);
 
+        // After the spinner value changed we must set the (in cart) list about the change and update the widget cost
         spinner.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
