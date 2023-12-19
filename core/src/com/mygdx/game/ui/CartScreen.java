@@ -6,6 +6,7 @@ import static com.mygdx.game.MunchBakeryMain.HEADER_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCREEN_WIDTH;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_ITEMS_SPACING;
+import static com.mygdx.game.Utilities.costFormat;
 import static com.mygdx.game.Utilities.getColorFromRGB;
 import static com.mygdx.game.Utilities.getDrawableFromPath;
 import static com.mygdx.game.Utilities.getTexturedColor;
@@ -159,11 +160,11 @@ public class CartScreen extends Window {
                         for (final CartProduct cartProductLocal : dataSource.getCartList()) {
                             localTotalCost += cartProductLocal.getCost() * cartProductLocal.getQuantity();
                         }
-                        totalCostLabel.setText(String.valueOf(localTotalCost));
+                        totalCostLabel.setText(costFormat.format(localTotalCost));
                     }
                 }
             });
         }
-        totalCostLabel.setText(String.valueOf(totalCost));
+        totalCostLabel.setText(costFormat.format(totalCost));
     }
 }

@@ -52,6 +52,8 @@ public class MunchBakeryMain extends ApplicationAdapter {
         cartScreen = new CartScreen(dataSource, skin);
         cartScreen.setWidth(SCREEN_WIDTH);
         cartScreen.setHeight(SCREEN_HEIGHT);
+        // need to call show only once,
+        // after that we can set the visibility to true and false to hide and show screens
         final boolean[] cartScreenShownBefore = {false};
 
         productsScreen.show(stage);

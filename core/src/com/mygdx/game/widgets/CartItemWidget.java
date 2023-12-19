@@ -2,6 +2,7 @@ package com.mygdx.game.widgets;
 
 import static com.mygdx.game.MunchBakeryMain.SCREEN_WIDTH;
 import static com.mygdx.game.Utilities.createRoundedDrawable;
+import static com.mygdx.game.Utilities.costFormat;
 import static com.mygdx.game.Utilities.getDrawableFromPath;
 
 import com.badlogic.gdx.Gdx;
@@ -54,7 +55,7 @@ public class CartItemWidget extends Table {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 cartProduct.setQuantity(spinner.getValue());
-                calculatedCostLabel.setText(String.valueOf(cartProduct.getCost() * cartProduct.getQuantity()));
+                calculatedCostLabel.setText(costFormat.format(cartProduct.getCost() * cartProduct.getQuantity()));
             }
         });
 
@@ -101,7 +102,7 @@ public class CartItemWidget extends Table {
         calculatedCostLabel.setAlignment(Align.right);
         add(calculatedCostLabel).prefWidth(CART_ITEM_WIDGET_WIDTH * SPLITTING_SEGMENT_COST).padRight(HORIZONTAL_SPACING / 2f).align(Align.left);
 
-        add(spinner).prefWidth(SPINNER_WIDTH).prefHeight(SPINNER_HEIGHT).align(Align.left);
+        add(spinner).align(Align.left);
         add(productTable).prefWidth(CART_ITEM_WIDGET_WIDTH * SPLITTING_SEGMENT_PRODUCT).padRight(HORIZONTAL_SPACING).align(Align.left);
 
         Image productImage = new Image(cartProduct.getImage());
