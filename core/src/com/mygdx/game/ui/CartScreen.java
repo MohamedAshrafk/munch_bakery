@@ -27,7 +27,7 @@ import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.data.DataSource;
 import com.mygdx.game.model.CartProduct;
 import com.mygdx.game.widgets.CartItemWidget;
-import com.mygdx.game.widgets.MySpinner;
+import com.mygdx.game.widgets.Spinner;
 
 import java.util.Objects;
 
@@ -144,7 +144,7 @@ public class CartScreen extends Window {
                     double localTotalCost = 0;
                     boolean reCalculateCost = false;
                     // If the spinner value of any cartItemWidget is changed or we removed any item, the total cost should be updated
-                    if (Objects.equals(actor.getName(), MySpinner.INCREMENT_BUTTON_NAME) || Objects.equals(actor.getName(), MySpinner.DECREMENT_BUTTON_NAME)) {
+                    if (Objects.equals(actor.getName(), Spinner.INCREMENT_BUTTON_NAME) || Objects.equals(actor.getName(), Spinner.DECREMENT_BUTTON_NAME)) {
                         reCalculateCost = true;
                     }
                     if (Objects.equals(actor.getName(), CartItemWidget.REMOVE_ITEM_BUTTON_NAME)) {

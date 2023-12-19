@@ -22,32 +22,35 @@ public class ProductWidget extends Table {
     private static final int PRODUCT_WIDGET_WIDTH = SCREEN_WIDTH - 100;
     private static final int PRODUCT_WIDGET_HEIGHT = 300;
     private static final int WINDOW_ROUNDING_RADIUS = 50;
-    private static final int SPINNER_WIDTH = 50;
-    private static final int SPINNER_HEIGHT = 200;
+    private static final int SPINNER_WIDTH = 300;
+    private static final int SPINNER_HEIGHT = 100;
     private static final float SPLITTING_RATIO_RIGHT = 0.45F;
     private static final float SPLITTING_RATIO_LEFT = 1 - SPLITTING_RATIO_RIGHT;
     private static final int HORIZONTAL_SPACING = 50;
+    private static final int ADD_BUTTON_HEIGHT = 100;
 
-    private final MySpinner spinner;
+    private final Spinner spinner;
 
     public int getQuantity() {
         return spinner.getValue();
     }
 
-    /** The appropriate widget to hold the product in products screen.
+    /**
+     * The appropriate widget to hold the product in products screen.
      * Extension of {@link Table}
+     *
      * @param product The product to be presented in this widget
-     * @param skin The skin used
-     * */
+     * @param skin    The skin used
+     */
     public ProductWidget(Product product, Skin skin) {
         setSkin(skin);
 
-        spinner = new MySpinner(skin, product.getQuantity(), 1, 20, 1);
+        spinner = new HSpinner(skin, 1, 1, 20, 1);
 
         align(Align.left);
         padTop(HORIZONTAL_SPACING / 2f);
         padRight(HORIZONTAL_SPACING);
-        padLeft(HORIZONTAL_SPACING);
+        padLeft(HORIZONTAL_SPACING / 2f);
         padBottom(HORIZONTAL_SPACING / 2f);
 
         // Labels styles and settings
@@ -68,7 +71,7 @@ public class ProductWidget extends Table {
 
         TextButton addToCartButton = new TextButton("Add to Cart", skin);
         addToCartButton.setName(ADD_TO_CART_BUTTON_NAME);
-        rightTable.add(addToCartButton).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_LEFT - SPINNER_WIDTH - HORIZONTAL_SPACING * 2).prefHeight(SPINNER_HEIGHT - 100)
+        rightTable.add(addToCartButton).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_LEFT - SPINNER_WIDTH).prefHeight(ADD_BUTTON_HEIGHT)
                 .align(Align.left);
 
 //        rightTable.debug();
@@ -81,7 +84,7 @@ public class ProductWidget extends Table {
         Container<Image> imageContainer = new Container<>(productImage);
         imageContainer.fill();
 
-        add(imageContainer).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_RIGHT - HORIZONTAL_SPACING * 2).prefHeight(PRODUCT_WIDGET_HEIGHT).padRight(HORIZONTAL_SPACING);
+        add(imageContainer).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_RIGHT - HORIZONTAL_SPACING).prefHeight(PRODUCT_WIDGET_HEIGHT).padRight(HORIZONTAL_SPACING / 2f);
         add(rightTable).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_LEFT).align(Align.left);
     }
 }

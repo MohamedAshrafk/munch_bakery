@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.mygdx.game.model.CartProduct;
-import com.mygdx.game.model.Product;
 
 public class CartItemWidget extends Table {
     public static final String REMOVE_ITEM_BUTTON_NAME = "cart remove item button";
@@ -35,7 +34,7 @@ public class CartItemWidget extends Table {
     private static final float SPLITTING_SEGMENT_IMAGE = 0.2f;
     private static final int HORIZONTAL_SPACING = 40;
 
-    private final MySpinner spinner;
+    private final Spinner spinner;
     private final Label calculatedCostLabel;
 
     /**
@@ -48,7 +47,7 @@ public class CartItemWidget extends Table {
     public CartItemWidget(final CartProduct cartProduct, Skin skin) {
         setSkin(skin);
 
-        spinner = new MySpinner(skin, cartProduct.getQuantity(), 1, 20, 1);
+        spinner = new VSpinner(skin, cartProduct.getQuantity(), 1, 20, 1);
 
         // After the spinner value changed we must set the (in cart) list about the change and update the widget cost
         spinner.addListener(new ChangeListener() {

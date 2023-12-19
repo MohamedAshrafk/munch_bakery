@@ -6,56 +6,29 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 
-public class MySpinner extends Table {
-
-    private static final int SPINNER_DIMENSION = 55;
-    private static final int SMALL_SPACING = 15;
-
-    public static final String DECREMENT_BUTTON_NAME = "spinner decrement button";
-    public static final String INCREMENT_BUTTON_NAME = "spinner increment button";
-
-
-    public int getValue() {
-        return value;
+public class VSpinner extends Spinner{
+    public VSpinner(Skin skin) {
+        super(skin);
     }
 
-    private int value;
-    private final int minDegreeVal;
-    private final int maxDegreeVal;
-    private final int stepSize;
+    public VSpinner(Skin skin, int startValue, int minVal, int maxVal, int stepSizePara) {
+        super(skin, startValue, minVal, maxVal, stepSizePara);
 
-    TextField spinnerTF;
+        // Create a skin (you can use the default skin or create your own)
+        Skin localSkin = new Skin(Gdx.files.internal("uiskin.json"));
 
-    /**
-     * Creates a new Spinner as structure of {@link Table}
-     *
-     * @param skin the skin to be used on making the spinner
-     */
-    public MySpinner(Skin skin) {
-        this(skin, 0, 0, 100, 1);
-    }
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.background = localSkin.getDrawable("textfield");
+        textFieldStyle.font = localSkin.getFont("default-font");
+        textFieldStyle.fontColor = localSkin.getColor("white");
+        textFieldStyle.font.getData().setScale(2.1f);
 
-    /**
-     * Creates a new Spinner as structure of {@link Table}
-     *
-     * @param skin         the skin to be used on making the spinner
-     * @param startValue   the start value
-     * @param minVal       the minimum value
-     * @param maxVal       the maximum value
-     * @param stepSizePara the step size between values
-     */
-    public MySpinner(Skin skin, int startValue, int minVal, int maxVal, int stepSizePara) {
-
-        this.value = startValue;
-        this.minDegreeVal = minVal;
-        this.maxDegreeVal = maxVal;
-        this.stepSize = stepSizePara;
+        final TextField spinnerTF = new TextField(String.valueOf(value), textFieldStyle);
 
         // making the spinner using two TextButtons and a TextField
         Drawable minusIconDrawable = getDrawableFromPath("arrow_down_icon.png");
@@ -76,16 +49,6 @@ public class MySpinner extends Table {
         });
         decrementButton.setName(DECREMENT_BUTTON_NAME);
 
-        // Create a skin (you can use the default skin or create your own)
-        Skin localSkin = new Skin(Gdx.files.internal("uiskin.json"));
-
-        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
-        textFieldStyle.background = localSkin.getDrawable("textfield");
-        textFieldStyle.font = localSkin.getFont("default-font");
-        textFieldStyle.fontColor = localSkin.getColor("white");
-        textFieldStyle.font.getData().setScale(2.1f);
-
-        spinnerTF = new TextField(String.valueOf(value), textFieldStyle);
         spinnerTF.setAlignment(Align.center);
         spinnerTF.setDisabled(true);
 
@@ -108,9 +71,5 @@ public class MySpinner extends Table {
         add(spinnerTF).prefHeight(SPINNER_DIMENSION).align(Align.center).row();
         add().padTop(2f).row();
         add(decrementButton).prefWidth(SPINNER_DIMENSION).prefHeight(SPINNER_DIMENSION).align(Align.center);
-    }
-
-    private boolean validateValue(int value) {
-        return value <= maxDegreeVal && value >= minDegreeVal;
     }
 }
