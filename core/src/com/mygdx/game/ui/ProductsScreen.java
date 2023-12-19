@@ -89,7 +89,7 @@ public class ProductsScreen extends Window {
         Table headerTable = new Table();
         headerTable.background(getTexturedColor(HEADER_COLOR));
 
-        Drawable cartIconDrawable = getDrawableFromPath("cart_essential_shopping_170px.png");
+        Drawable cartIconDrawable = getDrawableFromPath("cart_shopping_icon_170px.png");
 
         final ImageButton cartButton = new ImageButton(cartIconDrawable);
         cartButton.setName(CART_BUTTON_NAME);

@@ -17,8 +17,8 @@ public class CartProduct {
         this(cartProduct.name, cartProduct.cost, cartProduct.quantity, cartProduct.image, cartProduct.id);
     }
 
-    public CartProduct(Product product) {
-        this(product.getName(), product.getCost(), product.getQuantity(), product.getImage(), product.getId());
+    public CartProduct(Product product, int quantity) {
+        this(product.getName(), product.getCost(), quantity, product.getImage(), product.getId());
     }
 
     public CartProduct(String name, Double cost, Drawable image, int id) {

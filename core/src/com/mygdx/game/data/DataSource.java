@@ -47,10 +47,9 @@ public class DataSource {
     }
 
     public boolean addToCartWithQuantity(Product product, int quantity) {
-        CartProduct newProduct = new CartProduct(product);
+        CartProduct newProduct = new CartProduct(product, quantity);
 
         if (!cartList.contains(newProduct)) {
-            newProduct.setQuantity(quantity);
             cartList.add(newProduct);
             return true;
         } else {
@@ -58,7 +57,7 @@ public class DataSource {
         }
     }
 
-    public boolean removeProductFromCart(CartProduct cartProduct){
+    public boolean removeProductFromCart(CartProduct cartProduct) {
         return cartList.remove(cartProduct);
     }
 }
