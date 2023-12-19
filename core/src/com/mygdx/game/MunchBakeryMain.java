@@ -4,6 +4,9 @@ import static com.mygdx.game.Utilities.getDrawableFromPath;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.mygdx.game.model.Product;
+import com.mygdx.game.ui.CartScreen;
+import com.mygdx.game.ui.ProductsScreen;
 
 import java.util.ArrayList;
 import java.util.List;

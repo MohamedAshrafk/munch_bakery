@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.widgets;
 
 import static com.mygdx.game.Utilities.getDrawableFromPath;
 

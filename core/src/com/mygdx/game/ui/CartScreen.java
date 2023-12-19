@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.ui;
 
 import static com.mygdx.game.MunchBakeryMain.BOTTOM_PADDING;
 import static com.mygdx.game.MunchBakeryMain.HEADER_HEIGHT;
@@ -25,6 +25,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.MunchBakeryMain;
+import com.mygdx.game.model.Product;
+import com.mygdx.game.widgets.CartItemWidget;
+import com.mygdx.game.widgets.MySpinner;
 
 import java.util.Objects;
 

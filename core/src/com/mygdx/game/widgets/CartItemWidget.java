@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.widgets;
 
 import static com.mygdx.game.MunchBakeryMain.SCREEN_WIDTH;
 import static com.mygdx.game.Utilities.createRoundedDrawable;
@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.mygdx.game.model.Product;
 
 public class CartItemWidget extends Table {
     public static final String REMOVE_ITEM_BUTTON_NAME = "cart remove item button";
