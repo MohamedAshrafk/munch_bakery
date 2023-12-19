@@ -1,6 +1,7 @@
 package com.mygdx.game.ui;
 
 import static com.mygdx.game.MunchBakeryMain.BOTTOM_PADDING;
+import static com.mygdx.game.MunchBakeryMain.HEADER_COLOR;
 import static com.mygdx.game.MunchBakeryMain.HEADER_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCREEN_WIDTH;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_HEIGHT;
@@ -27,11 +28,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
-import com.mygdx.game.model.CartProduct;
+import com.mygdx.game.data.DataSource;
 import com.mygdx.game.model.Product;
 import com.mygdx.game.widgets.ProductWidget;
 
-import java.util.List;
 import java.util.Objects;
 
 public class ProductsScreen extends Window {
@@ -45,17 +45,15 @@ public class ProductsScreen extends Window {
     public static final int BUTTON_WIDTH = 140;
 
     // considering the main class as the data source (should be replaced by appropriate data source like internet or local database)
-    private final List<Product> productList;
-    private final List<CartProduct> inCartList;
     private final Skin skin;
     private final Table table;
     private final Label.LabelStyle labelStyle;
+    private final DataSource dataSource;
 
-    public ProductsScreen(List<Product> productList, List<CartProduct> inCartList, Skin skin) {
+    public ProductsScreen(DataSource dataSource, Skin skin) {
         super("", skin);
         this.skin = skin;
-        this.productList = productList;
-        this.inCartList = inCartList;
+        this.dataSource = dataSource;
 
         background(getTexturedColor(getColorFromRGB(0, 0, 0, 1)));
 
@@ -89,7 +87,7 @@ public class ProductsScreen extends Window {
 
     private void configureHeader() {
         Table headerTable = new Table();
-        headerTable.background(skin.getDrawable("default-slider"));
+        headerTable.background(getTexturedColor(HEADER_COLOR));
 
         Drawable cartIconDrawable = getDrawableFromPath("cart_essential_shopping_170px.png");
 
@@ -106,7 +104,7 @@ public class ProductsScreen extends Window {
     private void configureBody() {
         VerticalGroup widgetGroup = new VerticalGroup();
 
-        for (final Product product : productList) {
+        for (final Product product : dataSource.getProductsList()) {
             final ProductWidget productWidget = new ProductWidget(product, skin);
 
             widgetGroup.addActor(productWidget);
@@ -116,11 +114,7 @@ public class ProductsScreen extends Window {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     if (Objects.equals(actor.getName(), ProductWidget.ADD_TO_CART_BUTTON_NAME)) {
-                        CartProduct newProduct = new CartProduct(product);
-                        if (!inCartList.contains(newProduct)) {
-
-                            newProduct.setQuantity(productWidget.getQuantity());
-                            inCartList.add(newProduct);
+                        if (dataSource.addToCartWithQuantity(product, productWidget.getQuantity())) {
                             showDialogWithText("The Product was added successfully");
 
                         } else {

@@ -1,6 +1,7 @@
 package com.mygdx.game.ui;
 
 import static com.mygdx.game.MunchBakeryMain.BOTTOM_PADDING;
+import static com.mygdx.game.MunchBakeryMain.HEADER_COLOR;
 import static com.mygdx.game.MunchBakeryMain.HEADER_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCREEN_WIDTH;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_HEIGHT;
@@ -23,11 +24,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
+import com.mygdx.game.data.DataSource;
 import com.mygdx.game.model.CartProduct;
 import com.mygdx.game.widgets.CartItemWidget;
 import com.mygdx.game.widgets.MySpinner;
 
-import java.util.List;
 import java.util.Objects;
 
 public class CartScreen extends Window {
@@ -37,22 +38,19 @@ public class CartScreen extends Window {
     private static final int TOTAL_COST_RIGHT_PADDING = 300;
 
     // considering the main class as the data source (should be replaced by appropriate data source like internet or local database)
-    private Stage stage;
     private final Skin skin;
     private final Table table;
     private final Label.LabelStyle labelStyle;
 
-    double totalCost;
-
     private Label totalCostLabel;
     private VerticalGroup widgetGroup;
 
-    private final List<CartProduct> inCartList;
+    private final DataSource dataSource;
 
-    public CartScreen(List<CartProduct> inCartList, Skin skin) {
+    public CartScreen(DataSource dataSource, Skin skin) {
         super("", skin);
-        this.inCartList = inCartList;
         this.skin = skin;
+        this.dataSource = dataSource;
 
         background(getTexturedColor(getColorFromRGB(0, 0, 0, 1)));
 
@@ -75,7 +73,6 @@ public class CartScreen extends Window {
 
 
     public Window show(Stage stage) {
-        updateCartItems();
         stage.addActor(this);
         stage.cancelTouchFocus();
         stage.setKeyboardFocus(this);
@@ -84,10 +81,19 @@ public class CartScreen extends Window {
         return this;
     }
 
+    @Override
+    public void setVisible(boolean visible) {
+        if (visible) {
+            updateCartItems();
+            super.setVisible(true);
+        } else {
+            super.setVisible(false);
+        }
+    }
 
     private void configureHeader() {
         Table headerTable = new Table();
-        headerTable.background(skin.getDrawable("default-slider"));
+        headerTable.background(getTexturedColor(HEADER_COLOR));
 //        headerTable.background(getTexturedColor(getColorFromRGB(255,181,170,255)));
 
         Drawable arrowIcon = getDrawableFromPath("arrow_left_icon_170px.png");
@@ -104,8 +110,7 @@ public class CartScreen extends Window {
 
     private void configureBody() {
         widgetGroup = new VerticalGroup();
-        totalCost = 0;
-        totalCostLabel = new Label(String.valueOf(totalCost), labelStyle);
+        totalCostLabel = new Label(String.valueOf(0.0d), labelStyle);
 
         updateCartItems();
 
@@ -125,7 +130,8 @@ public class CartScreen extends Window {
 
     private void updateCartItems() {
         widgetGroup.clear();
-        for (final CartProduct cartProduct : inCartList) {
+        double totalCost = 0;
+        for (final CartProduct cartProduct : dataSource.getCartList()) {
             final CartItemWidget cartItemWidget = new CartItemWidget(cartProduct, skin);
             totalCost += cartProduct.getCost() * cartProduct.getQuantity();
 
@@ -142,7 +148,7 @@ public class CartScreen extends Window {
                         reCalculateCost = true;
                     }
                     if (Objects.equals(actor.getName(), CartItemWidget.REMOVE_ITEM_BUTTON_NAME)) {
-                        inCartList.remove(cartProduct);
+                        dataSource.removeProductFromCart(cartProduct);
                         widgetGroup.removeActor(cartItemWidget);
 
                         reCalculateCost = true;
@@ -150,7 +156,7 @@ public class CartScreen extends Window {
 
                     // looping on the (in cart) products list to calculate the new total cost
                     if (reCalculateCost) {
-                        for (final CartProduct cartProductLocal : inCartList) {
+                        for (final CartProduct cartProductLocal : dataSource.getCartList()) {
                             localTotalCost += cartProductLocal.getCost() * cartProductLocal.getQuantity();
                         }
                         totalCostLabel.setText(String.valueOf(localTotalCost));
