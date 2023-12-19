@@ -24,8 +24,8 @@ public class ProductWidget extends Table {
     private static final int WINDOW_ROUNDING_RADIUS = 50;
     private static final int SPINNER_WIDTH = 300;
     private static final int SPINNER_HEIGHT = 100;
-    private static final float SPLITTING_RATIO_RIGHT = 0.45F;
-    private static final float SPLITTING_RATIO_LEFT = 1 - SPLITTING_RATIO_RIGHT;
+    private static final float SPLITTING_RATIO_LEFT = 0.40F;
+    private static final float SPLITTING_RATIO_RIGHT = 1 - SPLITTING_RATIO_LEFT;
     private static final int HORIZONTAL_SPACING = 50;
     private static final int ADD_BUTTON_HEIGHT = 100;
 
@@ -50,7 +50,7 @@ public class ProductWidget extends Table {
         align(Align.left);
         padTop(HORIZONTAL_SPACING / 2f);
         padRight(HORIZONTAL_SPACING);
-        padLeft(HORIZONTAL_SPACING / 2f);
+        padLeft(HORIZONTAL_SPACING);
         padBottom(HORIZONTAL_SPACING / 2f);
 
         // Labels styles and settings
@@ -67,11 +67,11 @@ public class ProductWidget extends Table {
         rightTable.add().padTop(10).row();
         rightTable.add(new Label(String.valueOf(product.getCost()), labelStyle)).colspan(2).align(Align.right).row();
         rightTable.add().padTop(10).row();
-        rightTable.add(spinner).prefWidth(SPINNER_WIDTH).prefHeight(SPINNER_HEIGHT).padRight(HORIZONTAL_SPACING).align(Align.center);
+        rightTable.add(spinner).padRight(HORIZONTAL_SPACING).align(Align.center);
 
         TextButton addToCartButton = new TextButton("Add to Cart", skin);
         addToCartButton.setName(ADD_TO_CART_BUTTON_NAME);
-        rightTable.add(addToCartButton).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_LEFT - SPINNER_WIDTH).prefHeight(ADD_BUTTON_HEIGHT)
+        rightTable.add(addToCartButton).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_RIGHT - SPINNER_WIDTH).prefHeight(ADD_BUTTON_HEIGHT)
                 .align(Align.left);
 
 //        rightTable.debug();
@@ -84,7 +84,7 @@ public class ProductWidget extends Table {
         Container<Image> imageContainer = new Container<>(productImage);
         imageContainer.fill();
 
-        add(imageContainer).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_RIGHT - HORIZONTAL_SPACING).prefHeight(PRODUCT_WIDGET_HEIGHT).padRight(HORIZONTAL_SPACING / 2f);
-        add(rightTable).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_LEFT).align(Align.left);
+        add(imageContainer).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_LEFT - HORIZONTAL_SPACING).prefHeight(PRODUCT_WIDGET_HEIGHT).padRight(HORIZONTAL_SPACING / 2f);
+        add(rightTable).prefWidth(PRODUCT_WIDGET_WIDTH * SPLITTING_RATIO_RIGHT).align(Align.left);
     }
 }
