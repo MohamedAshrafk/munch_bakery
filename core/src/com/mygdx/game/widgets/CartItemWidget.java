@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.mygdx.game.model.CartProduct;
 import com.mygdx.game.model.Product;
 
 public class CartItemWidget extends Table {
@@ -38,23 +39,23 @@ public class CartItemWidget extends Table {
     private final Label calculatedCostLabel;
 
     /**
-     * The appropriate widget to hold the product in the cart.
+     * The appropriate widget to hold the cartProduct in the cart.
      * Extension of {@link Table}
      *
-     * @param product The product to be presented in this widget
+     * @param cartProduct The cartProduct to be presented in this widget
      * @param skin    The skin used
      */
-    public CartItemWidget(final Product product, Skin skin) {
+    public CartItemWidget(final CartProduct cartProduct, Skin skin) {
         setSkin(skin);
 
-        spinner = new MySpinner(skin, product.getQuantity(), 1, 20, 1);
+        spinner = new MySpinner(skin, cartProduct.getQuantity(), 1, 20, 1);
 
         // After the spinner value changed we must set the (in cart) list about the change and update the widget cost
         spinner.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                product.setQuantity(spinner.getValue());
-                calculatedCostLabel.setText(String.valueOf(product.getCost() * product.getQuantity()));
+                cartProduct.setQuantity(spinner.getValue());
+                calculatedCostLabel.setText(String.valueOf(cartProduct.getCost() * cartProduct.getQuantity()));
             }
         });
 
@@ -74,14 +75,14 @@ public class CartItemWidget extends Table {
         Table productTable = new Table();
         productTable.align(Align.left);
 
-        Label productNameLabel = new Label(product.getName(), labelStyle);
+        Label productNameLabel = new Label(cartProduct.getName(), labelStyle);
         productNameLabel.setAlignment(Align.right);
         productNameLabel.setWidth(CART_ITEM_WIDGET_WIDTH * SPLITTING_SEGMENT_PRODUCT);
         productNameLabel.setWrap(true);
         productTable.add(productNameLabel).prefWidth(CART_ITEM_WIDGET_WIDTH * SPLITTING_SEGMENT_PRODUCT).align(Align.left).row();
         productTable.add().padTop(5).row();
 
-        Label productCostLabel = new Label(String.valueOf(product.getCost()), labelStyle);
+        Label productCostLabel = new Label(String.valueOf(cartProduct.getCost()), labelStyle);
         productCostLabel.setAlignment(Align.right);
         productTable.add(productCostLabel).prefWidth(CART_ITEM_WIDGET_WIDTH * SPLITTING_SEGMENT_PRODUCT).align(Align.left).row();
         productTable.add().padTop(10).row();
@@ -96,7 +97,7 @@ public class CartItemWidget extends Table {
 
         add(removeButton).align(Align.left);
 
-        double calculatedCost = product.getCost() * product.getQuantity();
+        double calculatedCost = cartProduct.getCost() * cartProduct.getQuantity();
         calculatedCostLabel = new Label(String.valueOf(calculatedCost), labelStyle);
         calculatedCostLabel.setAlignment(Align.right);
         add(calculatedCostLabel).prefWidth(CART_ITEM_WIDGET_WIDTH * SPLITTING_SEGMENT_COST).padRight(HORIZONTAL_SPACING / 2f).align(Align.left);
@@ -104,7 +105,7 @@ public class CartItemWidget extends Table {
         add(spinner).prefWidth(SPINNER_WIDTH).prefHeight(SPINNER_HEIGHT).align(Align.left);
         add(productTable).prefWidth(CART_ITEM_WIDGET_WIDTH * SPLITTING_SEGMENT_PRODUCT).padRight(HORIZONTAL_SPACING).align(Align.left);
 
-        Image productImage = new Image(product.getImage());
+        Image productImage = new Image(cartProduct.getImage());
         productImage.setAlign(Align.center);
         productImage.setScaling(Scaling.fit);
 

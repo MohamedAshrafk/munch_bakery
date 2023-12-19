@@ -4,6 +4,7 @@ import static com.mygdx.game.Utilities.getDrawableFromPath;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.mygdx.game.model.CartProduct;
 import com.mygdx.game.model.Product;
 import com.mygdx.game.ui.CartScreen;
 import com.mygdx.game.ui.ProductsScreen;
@@ -23,7 +24,7 @@ public class MunchBakeryMain extends Game {
     private ProductsScreen productsScreen;
     private CartScreen cartScreen;
     private List<Product> productsList;
-    private List<Product> inCartList;
+    private List<CartProduct> inCartList;
 
     public ProductsScreen getProductsScreen() {
         return productsScreen;
@@ -37,7 +38,7 @@ public class MunchBakeryMain extends Game {
         return productsList;
     }
 
-    public List<Product> getInCartList() {
+    public List<CartProduct> getInCartList() {
         return inCartList;
     }
 

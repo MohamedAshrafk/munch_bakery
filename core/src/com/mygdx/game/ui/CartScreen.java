@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MunchBakeryMain;
+import com.mygdx.game.model.CartProduct;
 import com.mygdx.game.model.Product;
 import com.mygdx.game.widgets.CartItemWidget;
 import com.mygdx.game.widgets.MySpinner;
@@ -104,9 +105,9 @@ public class CartScreen implements Screen {
         final VerticalGroup widgetGroup = new VerticalGroup();
         double totalCost = 0;
 
-        for (final Product product : munchBakeryMain.getInCartList()) {
-            final CartItemWidget cartItemWidget = new CartItemWidget(product, skin);
-            totalCost += product.getCost() * product.getQuantity();
+        for (final CartProduct cartProduct : munchBakeryMain.getInCartList()) {
+            final CartItemWidget cartItemWidget = new CartItemWidget(cartProduct, skin);
+            totalCost += cartProduct.getCost() * cartProduct.getQuantity();
 
             widgetGroup.addActor(cartItemWidget);
             widgetGroup.space(SCROLL_VIEW_ITEMS_SPACING);
@@ -121,7 +122,7 @@ public class CartScreen implements Screen {
                         reCalculateCost = true;
                     }
                     if (Objects.equals(actor.getName(), CartItemWidget.REMOVE_ITEM_BUTTON_NAME)) {
-                        munchBakeryMain.getInCartList().remove(product);
+                        munchBakeryMain.getInCartList().remove(cartProduct);
                         widgetGroup.removeActor(cartItemWidget);
 
                         reCalculateCost = true;
@@ -129,8 +130,8 @@ public class CartScreen implements Screen {
 
                     // looping on the (in cart) products list to calculate the new total cost
                     if (reCalculateCost) {
-                        for (final Product product : munchBakeryMain.getInCartList()) {
-                            localTotalCost += product.getCost() * product.getQuantity();
+                        for (final CartProduct cartProductLocal : munchBakeryMain.getInCartList()) {
+                            localTotalCost += cartProductLocal.getCost() * cartProductLocal.getQuantity();
                         }
                         totalCostLabel.setText(String.valueOf(localTotalCost));
                     }

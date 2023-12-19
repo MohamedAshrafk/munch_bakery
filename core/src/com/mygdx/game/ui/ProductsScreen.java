@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MunchBakeryMain;
+import com.mygdx.game.model.CartProduct;
 import com.mygdx.game.model.Product;
 import com.mygdx.game.widgets.ProductWidget;
 
@@ -117,10 +118,10 @@ public class ProductsScreen implements Screen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     if (Objects.equals(actor.getName(), ProductWidget.ADD_TO_CART_BUTTON_NAME)) {
-                        if (!munchBakeryMain.getInCartList().contains(product)) {
-                            Product newProduct = new Product(product);
-                            newProduct.setQuantity(productWidget.getQuantity());
+                        CartProduct newProduct = new CartProduct(product);
+                        if (!munchBakeryMain.getInCartList().contains(newProduct)) {
 
+                            newProduct.setQuantity(productWidget.getQuantity());
                             munchBakeryMain.getInCartList().add(newProduct);
                             showDialogWithText("The Product was added successfully");
                         } else {

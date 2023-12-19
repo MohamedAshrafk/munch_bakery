@@ -4,7 +4,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 import java.util.Objects;
 
-public class Product {
+public class CartProduct {
+
     private final int id;
     private final String name;
     private final Double cost;
@@ -12,24 +13,24 @@ public class Product {
 
     private final Drawable image;
 
-    public Product(Product product) {
-        this(product.name, product.cost, product.quantity, product.image, product.id);
+    public CartProduct(CartProduct cartProduct) {
+        this(cartProduct.name, cartProduct.cost, cartProduct.quantity, cartProduct.image, cartProduct.id);
     }
 
-    public Product(String name, Double cost, Drawable image, int id) {
+    public CartProduct(Product product) {
+        this(product.getName(), product.getCost(), product.getQuantity(), product.getImage(), product.getId());
+    }
+
+    public CartProduct(String name, Double cost, Drawable image, int id) {
         this(name, cost, 1, image, id);
     }
 
-    public Product(String name, Double cost, int quantity, Drawable image, int id) {
+    public CartProduct(String name, Double cost, int quantity, Drawable image, int id) {
         this.name = name;
         this.cost = cost;
         this.quantity = quantity;
         this.image = image;
         this.id = id;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {
@@ -56,8 +57,7 @@ public class Product {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Objects.equals(id, product.id);
+        CartProduct cartProduct = (CartProduct) o;
+        return Objects.equals(id, cartProduct.id);
     }
-
 }
