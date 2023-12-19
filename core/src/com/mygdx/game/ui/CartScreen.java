@@ -2,15 +2,14 @@ package com.mygdx.game.ui;
 
 import static com.mygdx.game.MunchBakeryMain.BOTTOM_PADDING;
 import static com.mygdx.game.MunchBakeryMain.HEADER_HEIGHT;
-import static com.mygdx.game.MunchBakeryMain.SCREEN_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCREEN_WIDTH;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_ITEMS_SPACING;
+import static com.mygdx.game.Utilities.getColorFromRGB;
 import static com.mygdx.game.Utilities.getDrawableFromPath;
+import static com.mygdx.game.Utilities.getTexturedColor;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,44 +19,42 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.MunchBakeryMain;
 import com.mygdx.game.model.CartProduct;
-import com.mygdx.game.model.Product;
 import com.mygdx.game.widgets.CartItemWidget;
 import com.mygdx.game.widgets.MySpinner;
 
+import java.util.List;
 import java.util.Objects;
 
-public class CartScreen implements Screen {
+public class CartScreen extends Window {
 
+    public static final String BACK_BUTTON_NAME = "back button";
     private static final int TOTAL_COST_TABLE_HEIGHT = 170;
     private static final int TOTAL_COST_RIGHT_PADDING = 300;
 
     // considering the main class as the data source (should be replaced by appropriate data source like internet or local database)
-    private final MunchBakeryMain munchBakeryMain;
     private Stage stage;
-    private Skin skin;
-    private Table table;
-    private Label.LabelStyle labelStyle;
+    private final Skin skin;
+    private final Table table;
+    private final Label.LabelStyle labelStyle;
+
+    double totalCost;
 
     private Label totalCostLabel;
+    private VerticalGroup widgetGroup;
 
-    public CartScreen(MunchBakeryMain munchBakeryMain) {
-        this.munchBakeryMain = munchBakeryMain;
-    }
+    private final List<CartProduct> inCartList;
 
-    @Override
-    public void show() {
-        Viewport viewport = new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
-        stage = new Stage(viewport);
+    public CartScreen(List<CartProduct> inCartList, Skin skin) {
+        super("", skin);
+        this.inCartList = inCartList;
+        this.skin = skin;
 
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
-        skin.getFont("default-font").getData().setScale(2.5f);
+        background(getTexturedColor(getColorFromRGB(0, 0, 0, 1)));
 
         table = new Table();
         table.setFillParent(true);
@@ -73,9 +70,18 @@ public class CartScreen implements Screen {
         configureBody();
 
         // adding everything to the stage
-        stage.addActor(table);
+        add(table);
+    }
 
-        Gdx.input.setInputProcessor(stage);
+
+    public Window show(Stage stage) {
+        updateCartItems();
+        stage.addActor(this);
+        stage.cancelTouchFocus();
+        stage.setKeyboardFocus(this);
+        stage.setScrollFocus(this);
+        setPosition(Math.round((stage.getWidth() - getWidth()) / 2), Math.round((stage.getHeight() - getHeight()) / 2));
+        return this;
     }
 
 
@@ -87,13 +93,8 @@ public class CartScreen implements Screen {
         Drawable arrowIcon = getDrawableFromPath("arrow_left_icon_170px.png");
 
         ImageButton backButton = new ImageButton(arrowIcon);
+        backButton.setName(BACK_BUTTON_NAME);
 
-        backButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                munchBakeryMain.setScreen(munchBakeryMain.getProductsScreen());
-            }
-        });
         headerTable.add(backButton).padRight(220).align(Align.left);
         headerTable.add(new Label("Your Cart", labelStyle)).padRight(380).align(Align.center);
 
@@ -102,10 +103,29 @@ public class CartScreen implements Screen {
     }
 
     private void configureBody() {
-        final VerticalGroup widgetGroup = new VerticalGroup();
-        double totalCost = 0;
+        widgetGroup = new VerticalGroup();
+        totalCost = 0;
+        totalCostLabel = new Label(String.valueOf(totalCost), labelStyle);
 
-        for (final CartProduct cartProduct : munchBakeryMain.getInCartList()) {
+        updateCartItems();
+
+        Table totalCostTable = new Table();
+        totalCostTable.align(Align.center);
+        totalCostTable.background(skin.getDrawable("default-slider"));
+//        totalCostTable.background(getTexturedColor(getColorFromRGB(255, 181, 170, 255)));
+
+        totalCostTable.add(new Label("Total", labelStyle)).padRight(TOTAL_COST_RIGHT_PADDING).align(Align.left);
+        totalCostTable.add(totalCostLabel).align(Align.left);
+
+        ScrollPane scrollPane = new ScrollPane(widgetGroup);
+        table.add(scrollPane).prefHeight(SCROLL_VIEW_HEIGHT - TOTAL_COST_TABLE_HEIGHT).prefWidth(SCREEN_WIDTH).align(Align.left).row();
+        table.add(totalCostTable).prefHeight(TOTAL_COST_TABLE_HEIGHT).prefWidth(SCREEN_WIDTH - 100);
+
+    }
+
+    private void updateCartItems() {
+        widgetGroup.clear();
+        for (final CartProduct cartProduct : inCartList) {
             final CartItemWidget cartItemWidget = new CartItemWidget(cartProduct, skin);
             totalCost += cartProduct.getCost() * cartProduct.getQuantity();
 
@@ -122,7 +142,7 @@ public class CartScreen implements Screen {
                         reCalculateCost = true;
                     }
                     if (Objects.equals(actor.getName(), CartItemWidget.REMOVE_ITEM_BUTTON_NAME)) {
-                        munchBakeryMain.getInCartList().remove(cartProduct);
+                        inCartList.remove(cartProduct);
                         widgetGroup.removeActor(cartItemWidget);
 
                         reCalculateCost = true;
@@ -130,7 +150,7 @@ public class CartScreen implements Screen {
 
                     // looping on the (in cart) products list to calculate the new total cost
                     if (reCalculateCost) {
-                        for (final CartProduct cartProductLocal : munchBakeryMain.getInCartList()) {
+                        for (final CartProduct cartProductLocal : inCartList) {
                             localTotalCost += cartProductLocal.getCost() * cartProductLocal.getQuantity();
                         }
                         totalCostLabel.setText(String.valueOf(localTotalCost));
@@ -138,56 +158,6 @@ public class CartScreen implements Screen {
                 }
             });
         }
-
-        totalCostLabel = new Label(String.valueOf(totalCost), labelStyle);
-
-        Table totalCostTable = new Table();
-        totalCostTable.align(Align.center);
-        totalCostTable.background(skin.getDrawable("default-slider"));
-//        totalCostTable.background(getTexturedColor(getColorFromRGB(255, 181, 170, 255)));
-
-        totalCostTable.add(new Label("Total", labelStyle)).padRight(TOTAL_COST_RIGHT_PADDING).align(Align.left);
-        totalCostTable.add(totalCostLabel).align(Align.left);
-
-        ScrollPane scrollPane = new ScrollPane(widgetGroup);
-        table.add(scrollPane).prefHeight(SCROLL_VIEW_HEIGHT - TOTAL_COST_TABLE_HEIGHT).prefWidth(SCREEN_WIDTH).align(Align.left).row();
-        table.add(totalCostTable).prefHeight(TOTAL_COST_TABLE_HEIGHT).prefWidth(SCREEN_WIDTH - 100);
-
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
-    }
-
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-//        Gdx.gl.glClearColor(255 / 255f, 247 / 255f, 248 / 255f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        // Update and draw the stage
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-        dispose();
+        totalCostLabel.setText(String.valueOf(totalCost));
     }
 }

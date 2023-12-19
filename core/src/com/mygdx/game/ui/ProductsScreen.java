@@ -2,17 +2,16 @@ package com.mygdx.game.ui;
 
 import static com.mygdx.game.MunchBakeryMain.BOTTOM_PADDING;
 import static com.mygdx.game.MunchBakeryMain.HEADER_HEIGHT;
-import static com.mygdx.game.MunchBakeryMain.SCREEN_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCREEN_WIDTH;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_HEIGHT;
 import static com.mygdx.game.MunchBakeryMain.SCROLL_VIEW_ITEMS_SPACING;
 import static com.mygdx.game.Utilities.createRoundedDrawable;
+import static com.mygdx.game.Utilities.getColorFromRGB;
 import static com.mygdx.game.Utilities.getDrawableFromPath;
+import static com.mygdx.game.Utilities.getTexturedColor;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -28,17 +27,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.MunchBakeryMain;
 import com.mygdx.game.model.CartProduct;
 import com.mygdx.game.model.Product;
 import com.mygdx.game.widgets.ProductWidget;
 
+import java.util.List;
 import java.util.Objects;
 
-public class ProductsScreen implements Screen {
+public class ProductsScreen extends Window {
 
+    public static final String CART_BUTTON_NAME = "cart button";
     public static final int GENERAL_HEIGHT_SPACING = 50;
     public static final int TABLE_HORIZONTAL_PADDING = 30;
     public static final int DIALOG_WIDTH = 900;
@@ -47,23 +45,20 @@ public class ProductsScreen implements Screen {
     public static final int BUTTON_WIDTH = 140;
 
     // considering the main class as the data source (should be replaced by appropriate data source like internet or local database)
-    private final MunchBakeryMain munchBakeryMain;
-    private Stage stage;
-    private Skin skin;
-    private Table table;
-    private Label.LabelStyle labelStyle;
+    private final List<Product> productList;
+    private final List<CartProduct> inCartList;
+    private final Skin skin;
+    private final Table table;
+    private final Label.LabelStyle labelStyle;
 
-    public ProductsScreen(MunchBakeryMain munchBakeryMain) {
-        this.munchBakeryMain = munchBakeryMain;
-    }
+    public ProductsScreen(List<Product> productList, List<CartProduct> inCartList, Skin skin) {
+        super("", skin);
+        this.skin = skin;
+        this.productList = productList;
+        this.inCartList = inCartList;
 
-    @Override
-    public void show() {
-        Viewport viewport = new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
-        stage = new Stage(viewport);
+        background(getTexturedColor(getColorFromRGB(0, 0, 0, 1)));
 
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
-        skin.getFont("default-font").getData().setScale(2.5f);
 
         table = new Table();
         table.setFillParent(true);
@@ -79,9 +74,16 @@ public class ProductsScreen implements Screen {
         configureBody();
 
         // adding everything to the stage
-        stage.addActor(table);
+        add(table);
+    }
 
-        Gdx.input.setInputProcessor(stage);
+    public Window show(Stage stage) {
+        stage.addActor(this);
+        stage.cancelTouchFocus();
+        stage.setKeyboardFocus(this);
+        stage.setScrollFocus(this);
+        setPosition(Math.round((stage.getWidth() - getWidth()) / 2), Math.round((stage.getHeight() - getHeight()) / 2));
+        return this;
     }
 
 
@@ -91,13 +93,9 @@ public class ProductsScreen implements Screen {
 
         Drawable cartIconDrawable = getDrawableFromPath("cart_essential_shopping_170px.png");
 
-        ImageButton cartButton = new ImageButton(cartIconDrawable);
-        cartButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                munchBakeryMain.setScreen(munchBakeryMain.getCartScreen());
-            }
-        });
+        final ImageButton cartButton = new ImageButton(cartIconDrawable);
+        cartButton.setName(CART_BUTTON_NAME);
+
         headerTable.add(cartButton).padRight(220).align(Align.left);
         headerTable.add(new Label("Products", labelStyle)).padRight(380).align(Align.center);
 
@@ -108,7 +106,7 @@ public class ProductsScreen implements Screen {
     private void configureBody() {
         VerticalGroup widgetGroup = new VerticalGroup();
 
-        for (final Product product : munchBakeryMain.getProductsList()) {
+        for (final Product product : productList) {
             final ProductWidget productWidget = new ProductWidget(product, skin);
 
             widgetGroup.addActor(productWidget);
@@ -119,11 +117,12 @@ public class ProductsScreen implements Screen {
                 public void changed(ChangeEvent event, Actor actor) {
                     if (Objects.equals(actor.getName(), ProductWidget.ADD_TO_CART_BUTTON_NAME)) {
                         CartProduct newProduct = new CartProduct(product);
-                        if (!munchBakeryMain.getInCartList().contains(newProduct)) {
+                        if (!inCartList.contains(newProduct)) {
 
                             newProduct.setQuantity(productWidget.getQuantity());
-                            munchBakeryMain.getInCartList().add(newProduct);
+                            inCartList.add(newProduct);
                             showDialogWithText("The Product was added successfully");
+
                         } else {
                             showDialogWithText("Already in the Cart");
                         }
@@ -171,42 +170,6 @@ public class ProductsScreen implements Screen {
 
         localTable.add(cancelButton).prefWidth(BUTTON_WIDTH).prefHeight(BUTTON_HEIGHT).align(Align.center).row();
         dialog.getContentTable().add(localTable).prefWidth(DIALOG_WIDTH - 200f).align(Align.center);
-        dialog.show(stage);
-    }
-
-
-    @Override
-    public void dispose() {
-        stage.dispose();
-    }
-
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        // Update and draw the stage
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-        dispose();
+        dialog.show(getStage());
     }
 }
