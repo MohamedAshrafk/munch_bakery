@@ -16,6 +16,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.mygdx.game.model.Product;
 
+import javax.swing.text.LabelView;
+
 public class ProductWidget extends Table {
 
     public static final String ADD_TO_CART_BUTTON_NAME = "add to cart button";
@@ -63,7 +65,9 @@ public class ProductWidget extends Table {
 
         Table rightTable = new Table();
 
-        rightTable.add(new Label(product.getName(), labelStyle)).colspan(2).align(Align.right).row();
+        Label nameLabel = new Label(product.getName(), labelStyle);
+        nameLabel.setWrap(true);
+        rightTable.add(nameLabel).prefWidth(nameLabel.getWidth()).colspan(2).align(Align.right).row();
         rightTable.add().padTop(10).row();
         rightTable.add(new Label(String.valueOf(product.getCost()), labelStyle)).colspan(2).align(Align.right).row();
         rightTable.add().padTop(10).row();
